@@ -1,7 +1,7 @@
-###Ipek.py
 import csv
 import urllib
 import urllib2
+#this function receives a sequence and returns the reverse complement of the sequence.
 def revcom(seq):
     answer=''
     for i in range(0,len(seq)):       
@@ -35,6 +35,7 @@ for k in range(0,Number_of_Sequences):
     		nonmasked=nonmasked+i
 
     finallist=[]
+    # The script below subits each target region to the CRISPRdirect website and receives a response that is later saved in a file called crna_file.txt
     for i in target_regions:
 
         values = {'userseq' :i,
@@ -45,15 +46,16 @@ for k in range(0,Number_of_Sequences):
         req = urllib2.Request(url, data)
         response = urllib2.urlopen(req)
         page = response.read()
-        with open('cccc.txt', 'w') as f:
+        with open('crna_file.txt', 'w') as f:
             f.write(page)
         f.close
        
         #############################################################################################################################################################################
-        # This part gets the crRNA in a file called crna.txt or a variable called temp and then screens it
+        # This part gets the crRNA in a file called crna_file.txt or a variable called temp and then screens it.
+        # This secondary read and write was used to interface with other modules not used in this publication.
         ###############################################################################################################################################################################
 
-        with open('cccc.txt','r') as f:
+        with open('crna_file.txt','r') as f:
             reader = csv.reader(f, delimiter="\t")
             temp = list(reader)
         f.close
@@ -67,6 +69,7 @@ for k in range(0,Number_of_Sequences):
             			if int(temp[i][8])==1:
             				finallist.append(temp[i])
 
+    #This section of the code saves the list of best cRNAs in a separate folder in csv format for the user to use.
     address2='crna/crna'+str(k)+'.csv'
     print finallist
     with open(address2, "wb") as f:
